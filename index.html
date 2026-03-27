@@ -9,6 +9,36 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700;14..32,800;14..32,900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        :root {
+            --bg-main: radial-gradient(circle at 10% 20%, #0b0f17, #070a10);
+            --sidebar-bg: rgba(12, 15, 25, 0.92);
+            --glass-surface: rgba(18, 22, 35, 0.7);
+            --glass-header: rgba(10, 14, 23, 0.7);
+            --glass-border: rgba(255, 153, 0, 0.25);
+            --text-primary: #ffffff;
+            --text-secondary: #cdd9ff;
+            --text-muted: rgba(255, 255, 255, 0.6);
+            --card-inner: rgba(0, 0, 0, 0.4);
+            --shadow-3d: 0 40px 100px -20px black;
+            --amber: #ff9900;
+            --amber-glow: rgba(255, 153, 0, 0.4);
+            --transition-speed: 0.4s;
+        }
+
+        .light-mode {
+            --bg-main: #f0f2f5;
+            --sidebar-bg: rgba(255, 255, 255, 0.95);
+            --glass-surface: rgba(255, 255, 255, 0.85);
+            --glass-header: rgba(255, 255, 255, 0.9);
+            --glass-border: rgba(0, 0, 0, 0.1);
+            --text-primary: #1a1a1a;
+            --text-secondary: #475569;
+            --text-muted: rgba(0, 0, 0, 0.5);
+            --card-inner: rgba(0, 0, 0, 0.04);
+            --shadow-3d: 0 40px 100px -20px rgba(0, 0, 0, 0.15);
+            --amber-glow: rgba(255, 153, 0, 0.2);
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -16,11 +46,12 @@
         }
 
         body {
-            background: radial-gradient(circle at 10% 20%, #0b0f17, #070a10);
+            background: var(--bg-main);
             font-family: 'Inter', sans-serif;
             min-height: 100vh;
             overflow-x: hidden;
-            color: #ffffff; /* Primary text color default */
+            color: var(--text-primary);
+            transition: background var(--transition-speed) ease, color var(--transition-speed) ease;
         }
 
         /* --- NEW LAYOUT: FIXED SIDEBAR + SCROLLABLE MAIN CONTENT --- */
@@ -37,14 +68,14 @@
             left: 0;
             bottom: 0;
             width: 300px;
-            background: rgba(12, 15, 25, 0.92);
+            background: var(--sidebar-bg);
             backdrop-filter: blur(20px);
             border-radius: 0 2.2rem 2.2rem 0;
             padding: 30px 18px;
             box-shadow: 25px 0 60px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.08);
-            border-right: 1px solid rgba(255, 153, 0, 0.35);
+            border-right: 1px solid var(--glass-border);
             transform: translateZ(30px) rotateY(-1deg);
-            transition: transform 0.4s ease, box-shadow 0.3s;
+            transition: all var(--transition-speed) ease;
             z-index: 1000;
             overflow-y: auto;
             overflow-x: hidden;
@@ -84,12 +115,12 @@
 
         /* glassmorphic 3D panel base */
         .glass-3d {
-            background: rgba(18, 22, 35, 0.7);
+            background: var(--glass-surface);
             backdrop-filter: blur(14px);
             border-radius: 2rem;
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            box-shadow: 0 25px 45px -12px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255,255,255,0.05);
-            transition: all 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--shadow-3d);
+            transition: all var(--transition-speed) cubic-bezier(0.2, 0.9, 0.4, 1.1);
         }
 
         /* main content flex structure */
@@ -114,10 +145,10 @@
             justify-content: space-between;
             align-items: center;
             padding: 16px 28px;
-            background: rgba(10, 14, 23, 0.7);
+            background: var(--glass-header);
             backdrop-filter: blur(12px);
             border-radius: 2rem;
-            border: 1px solid rgba(255,153,0,0.2);
+            border: 1px solid var(--glass-border);
             box-shadow: 0 20px 35px -15px rgba(0,0,0,0.4);
             transform: translateZ(20px);
         }
@@ -211,7 +242,7 @@
 
         /* hero card */
         .hero-floating {
-            background: linear-gradient(125deg, rgba(20,25,45,0.9), rgba(8,10,20,0.9));
+            background: linear-gradient(125deg, var(--glass-surface), var(--glass-header));
             backdrop-filter: blur(10px);
             border-radius: 2.5rem;
             padding: 32px 38px;
@@ -219,10 +250,10 @@
             flex-wrap: wrap;
             justify-content: space-between;
             align-items: center;
-            border: 1px solid rgba(255,153,0,0.35);
-            box-shadow: 0 35px 60px -20px black, inset 0 1px 1px rgba(255,255,255,0.05);
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--shadow-3d);
             transform: translateZ(35px);
-            transition: 0.3s;
+            transition: all var(--transition-speed);
         }
         .hero-left {
             display: flex;
@@ -258,7 +289,7 @@
             border: 1px solid rgba(111, 232, 160, 0.3);
         }
         .hero-title p {
-            color: #cdd9ff;
+            color: var(--text-secondary);
             margin-top: 8px;
             font-size: 1.1rem;
             opacity: 0.9;
@@ -284,16 +315,16 @@
             gap: 28px;
         }
         .prism-card {
-            background: rgba(18, 22, 40, 0.75);
+            background: var(--glass-surface);
             backdrop-filter: blur(8px);
             border-radius: 2rem;
             padding: 28px 32px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border: 1px solid rgba(255,255,255,0.08);
-            box-shadow: 0 30px 40px -20px black;
-            transition: all 0.35s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--shadow-3d);
+            transition: all var(--transition-speed) cubic-bezier(0.2, 0.9, 0.4, 1.1);
             transform: translateZ(15px);
         }
         .prism-card:hover {
@@ -320,7 +351,7 @@
             font-weight: 900;
             margin-top: 12px;
             line-height: 1;
-            color: white;
+            color: var(--text-primary);
         }
         .stat-icon-outer {
             background: rgba(255,153,0,0.12);
@@ -341,14 +372,14 @@
             gap: 28px;
         }
         .metal-card {
-            background: rgba(0,0,0,0.55);
+            background: var(--card-inner);
             backdrop-filter: blur(8px);
             border-radius: 2rem;
             padding: 26px 30px;
-            border-left: 5px solid #ff9900;
-            transition: 0.3s;
+            border-left: 5px solid var(--amber);
+            transition: var(--transition-speed);
             transform: translateZ(12px);
-            color: #ffffff;
+            color: var(--text-primary);
         }
         .metal-card .stat-meta {
             color: #a0aec0;
@@ -950,9 +981,9 @@
             font-size: 1.2rem;
         }
         .nav-item-3d:hover {
-            background: rgba(255, 153, 0, 0.12);
-            color: white;
-            border-color: rgba(255,153,0,0.3);
+            background: var(--amber-glow);
+            color: var(--text-primary);
+            border-color: var(--amber);
             transform: translateX(8px) translateZ(12px);
             box-shadow: 0 10px 20px -8px rgba(0,0,0,0.3);
         }
@@ -1095,6 +1126,9 @@
                     <div class="header-3d-card">
                         <div class="search-3d"><i class="fas fa-search"></i><input placeholder="Search product data..."></div>
                         <div class="user-profile-3d">
+                            <div class="badge-notif" id="themeToggle" title="Toggle Light/Dark Mode">
+                                <i class="fas fa-moon" id="themeIcon"></i>
+                            </div>
                             <div class="badge-notif"><i class="fas fa-bell"></i><div class="notif-dot-3d"></div></div>
                             <div class="country-pill"><img src="https://flagcdn.com/w40/us.png" width="20" style="border-radius:4px;" alt="flag"> <span>United States</span> <i class="fas fa-angle-down"></i></div>
                             <div class="avatar-3d" id="userAvatar">MA<div class="seller-tag">SELLER</div></div>
@@ -1148,7 +1182,7 @@
                     <div id="addProductsView" class="hidden-view">
                         <div class="find-products-container">
                             <h1 class="find-products-title">
-                                <i class="fas fa-search"></i> Find Products in Uviltro Market Place
+                                <i class="fas fa-search"></i> Find Products in Noshcom Market Place
                             </h1>
                             <div class="find-products-subtitle">
                                 <i class="fas fa-cart-shopping"></i> Add Products to your store
@@ -1775,6 +1809,36 @@
     function updateClock() { const el = document.getElementById('currentTimeDisplay'); if(el) el.innerText = new Date().toLocaleString('en-GB', { hour:'2-digit', minute:'2-digit', hour12:true }); }
     setInterval(updateClock,1000); updateClock();
     document.querySelectorAll('.tab-3d').forEach(t => t.addEventListener('click', function(){ document.querySelectorAll('.tab-3d').forEach(tt=>tt.classList.remove('active-tab')); this.classList.add('active-tab'); }));
+    // Theme Toggle Logic
+    const themeToggle = document.getElementById('themeToggle');
+    const themeIcon = document.getElementById('themeIcon');
+    const body = document.body;
+
+    function setTheme(isLight) {
+        if (isLight) {
+            body.classList.add('light-mode');
+            themeIcon.classList.remove('fa-moon');
+            themeIcon.classList.add('fa-sun');
+            localStorage.setItem('theme', 'light');
+        } else {
+            body.classList.remove('light-mode');
+            themeIcon.classList.remove('fa-sun');
+            themeIcon.classList.add('fa-moon');
+            localStorage.setItem('theme', 'dark');
+        }
+    }
+
+    // Initialize theme from localStorage
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'light') {
+        setTheme(true);
+    }
+
+    themeToggle.addEventListener('click', () => {
+        const isLight = body.classList.contains('light-mode');
+        setTheme(!isLight);
+    });
+
     activateView('dashboardView');
     // optional mobile toggle (hamburger)
     const isMobile = window.matchMedia("(max-width: 720px)").matches;
