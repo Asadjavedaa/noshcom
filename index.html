@@ -1147,7 +1147,7 @@
                             </div>
                             <div class="hero-right">
                                 <div class="time-pill-3d"><i class="fas fa-clock"></i> <span id="currentTimeDisplay">--</span></div>
-                                <div class="date-pill-3d"><i class="fas fa-calendar-alt"></i> Joined: 03/19/2026</div>
+                                <div class="date-pill-3d"><i class="fas fa-calendar-alt"></i> <span id="currentDateDisplay">--</span></div>
                             </div>
                         </div>
 
@@ -1806,7 +1806,12 @@
     });
     document.querySelectorAll('.sub-item-3d').forEach(sub => { sub.addEventListener('click', () => alert('Feature: ' + sub.innerText)); });
     document.getElementById('logoutBtn')?.addEventListener('click', () => location.reload());
-    function updateClock() { const el = document.getElementById('currentTimeDisplay'); if(el) el.innerText = new Date().toLocaleString('en-GB', { hour:'2-digit', minute:'2-digit', hour12:true }); }
+    function updateClock() { 
+        const timeEl = document.getElementById('currentTimeDisplay'); 
+        if(timeEl) timeEl.innerText = new Date().toLocaleString('en-GB', { hour:'2-digit', minute:'2-digit', hour12:true });
+        const dateEl = document.getElementById('currentDateDisplay');
+        if(dateEl) dateEl.innerText = new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+    }
     setInterval(updateClock,1000); updateClock();
     document.querySelectorAll('.tab-3d').forEach(t => t.addEventListener('click', function(){ document.querySelectorAll('.tab-3d').forEach(tt=>tt.classList.remove('active-tab')); this.classList.add('active-tab'); }));
     // Theme Toggle Logic
