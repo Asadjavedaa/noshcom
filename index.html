@@ -23,6 +23,7 @@
             --amber: #ff9900;
             --amber-glow: rgba(255, 153, 0, 0.4);
             --transition-speed: 0.4s;
+            --sidebar-width: 300px;
         }
 
         .light-mode {
@@ -59,6 +60,23 @@
             display: flex;
             min-height: 100vh;
             position: relative;
+            width: 100%;
+        }
+
+        /* Mobile Overlay */
+        .sidebar-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(4px);
+            z-index: 999;
+            display: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .sidebar-overlay.active {
+            display: block;
+            opacity: 1;
         }
 
         /* SIDEBAR - FIXED, STICKY, DOES NOT SCROLL */
@@ -67,7 +85,7 @@
             top: 0;
             left: 0;
             bottom: 0;
-            width: 300px;
+            width: var(--sidebar-width);
             background: var(--sidebar-bg);
             backdrop-filter: blur(20px);
             border-radius: 0 2.2rem 2.2rem 0;
@@ -75,7 +93,7 @@
             box-shadow: 25px 0 60px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.08);
             border-right: 1px solid var(--glass-border);
             transform: translateZ(30px) rotateY(-1deg);
-            transition: all var(--transition-speed) ease;
+            transition: all var(--transition-speed) cubic-bezier(0.16, 1, 0.3, 1);
             z-index: 1000;
             overflow-y: auto;
             overflow-x: hidden;
@@ -100,10 +118,11 @@
         /* MAIN CONTENT AREA — scrolls independently, respects fixed sidebar offset */
         .main-scroll-area {
             flex: 1;
-            margin-left: 300px;   /* offset equal to fixed sidebar width */
+            margin-left: var(--sidebar-width);
             padding: 28px 32px;
             min-height: 100vh;
             perspective: 1800px;
+            transition: margin-left var(--transition-speed) ease;
         }
 
         /* dashboard container inside scroll area */
@@ -123,6 +142,21 @@
             transition: all var(--transition-speed) cubic-bezier(0.2, 0.9, 0.4, 1.1);
         }
 
+        /* Responsive Table Wrapper */
+        .responsive-table-wrapper {
+            width: 100%;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            border-radius: 1.8rem;
+        }
+        .responsive-table-wrapper::-webkit-scrollbar {
+            height: 6px;
+        }
+        .responsive-table-wrapper::-webkit-scrollbar-thumb {
+            background: rgba(255, 153, 0, 0.3);
+            border-radius: 10px;
+        }
+
         /* main content flex structure */
         .nexus-grid {
             display: flex;
@@ -136,12 +170,13 @@
             display: flex;
             flex-direction: column;
             gap: 28px;
+            width: 100%;
         }
 
         /* header 3D card */
         .header-3d-card {
             display: flex;
-            flex-wrap: wrap;
+            flex-wrap: nowrap;
             justify-content: space-between;
             align-items: center;
             padding: 16px 28px;
@@ -151,7 +186,31 @@
             border: 1px solid var(--glass-border);
             box-shadow: 0 20px 35px -15px rgba(0,0,0,0.4);
             transform: translateZ(20px);
+            gap: 15px;
         }
+
+        /* Hamburger Menu Button */
+        .menu-toggle-btn {
+            display: none;
+            background: var(--amber);
+            border: none;
+            width: 44px;
+            height: 44px;
+            border-radius: 14px;
+            color: black;
+            font-size: 1.2rem;
+            cursor: pointer;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 8px 15px rgba(255,153,0,0.3);
+            transition: all 0.2s;
+            flex-shrink: 0;
+        }
+        .menu-toggle-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 20px rgba(255,153,0,0.4);
+        }
+
         .search-3d {
             display: flex;
             align-items: center;
@@ -160,6 +219,7 @@
             padding: 4px 8px 4px 20px;
             border: 1px solid rgba(255,255,255,0.1);
             width: 280px;
+            transition: width 0.3s ease;
         }
         .search-3d i {
             color: #ff9900;
@@ -1036,49 +1096,142 @@
             border-top: 1px solid rgba(255,255,255,0.08);
         }
 
-        @media (max-width: 1000px) {
+        @media (max-width: 1200px) {
             .sidebar-nexus {
                 width: 260px;
             }
             .main-scroll-area {
                 margin-left: 260px;
             }
-            .hero-left { flex-wrap: wrap; }
+            .prism-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
         }
-        @media (max-width: 720px) {
+
+        @media (max-width: 1024px) {
+            .hero-floating {
+                flex-direction: column;
+                gap: 20px;
+                text-align: center;
+            }
+            .hero-left {
+                flex-direction: column;
+            }
+            .hero-right {
+                justify-content: center;
+            }
+            .metrics-grid-3d {
+                grid-template-columns: 1fr;
+            }
+            .search-3d {
+                width: 200px;
+            }
+        }
+
+        @media (max-width: 850px) {
+            .search-3d {
+                display: none; /* Hide search on small tablets to save space */
+            }
+            .prism-grid {
+                grid-template-columns: 1fr;
+            }
+            .visual-card-3d {
+                width: 100%;
+                max-width: 400px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .menu-toggle-btn {
+                display: flex;
+            }
             .sidebar-nexus {
                 transform: translateX(-100%);
-                transition: transform 0.3s ease;
-                width: 280px;
                 border-radius: 0;
+                width: 280px;
+                box-shadow: none;
+                z-index: 1001;
             }
             .sidebar-nexus.mobile-open {
                 transform: translateX(0);
+                box-shadow: 25px 0 60px rgba(0,0,0,0.8);
             }
             .main-scroll-area {
                 margin-left: 0;
+                padding: 18px;
+            }
+            .header-3d-card {
+                padding: 12px 18px;
+                border-radius: 1.5rem;
+            }
+            .user-profile-3d {
+                gap: 12px;
+            }
+            .badge-notif {
+                width: 38px;
+                height: 38px;
+                border-radius: 12px;
+            }
+            .country-pill span {
+                display: none;
+            }
+            .avatar-3d {
+                width: 40px;
+                height: 40px;
+                border-radius: 12px;
+            }
+            .hero-title h2 {
+                font-size: 1.5rem;
+            }
+            .stat-number {
+                font-size: 2.5rem;
+            }
+            .revenue-double {
+                grid-template-columns: 1fr;
+            }
+            .balance-cards-row {
+                grid-template-columns: 1fr;
+            }
+            .kpi-val {
+                font-size: 1.8rem;
+            }
+            .chart-main-panel {
                 padding: 20px;
             }
-            .prism-grid, .revenue-double { grid-template-columns: 1fr; }
-            .hero-left { flex-direction: column; text-align: center; }
-            /* add a hamburger menu hint */
-            body::before {
-                content: "\f0c9";
-                font-family: "Font Awesome 6 Free";
-                font-weight: 900;
-                position: fixed;
-                top: 20px;
-                left: 20px;
-                z-index: 1200;
-                background: #ff9900;
-                padding: 12px 16px;
-                border-radius: 30px;
-                color: black;
-                cursor: pointer;
-                box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            .bars-container {
+                gap: 8px;
             }
-            body.menu-active::before {
-                content: "\f00d";
+            .bar-label {
+                font-size: 0.65rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-title h2 {
+                font-size: 1.25rem;
+            }
+            .hero-floating {
+                padding: 20px;
+            }
+            .prism-card, .metal-card {
+                padding: 20px;
+            }
+            .stat-number {
+                font-size: 2rem;
+            }
+            .kpi-card-3d {
+                padding: 18px;
+            }
+            .kpi-val {
+                font-size: 1.5rem;
+            }
+            .visual-card-3d {
+                height: 220px;
+                padding: 20px;
+            }
+            .card-number-3d {
+                font-size: 1.2rem;
+                letter-spacing: 2px;
             }
         }
         .hidden-view { display: none; }
@@ -1086,6 +1239,7 @@
     </style>
 </head>
 <body>
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
 <div class="app-layout">
     <!-- FIXED SIDEBAR (no scroll movement) -->
     <aside class="sidebar-nexus" id="fixedSidebar">
@@ -1124,6 +1278,9 @@
                 <main class="main-3d">
                     <!-- header 3D card -->
                     <div class="header-3d-card">
+                        <button class="menu-toggle-btn" id="mobileMenuToggle">
+                            <i class="fas fa-bars"></i>
+                        </button>
                         <div class="search-3d"><i class="fas fa-search"></i><input placeholder="Search product data..."></div>
                         <div class="user-profile-3d">
                             <div class="badge-notif" id="themeToggle" title="Toggle Light/Dark Mode">
@@ -1196,37 +1353,39 @@
                             </div>
 
                             <div class="results-table-container">
-                                <table class="find-table">
-                                    <thead>
-                                        <tr>
-                                            <th>ID</th>
-                                            <th>Title</th>
-                                            <th>Category</th>
-                                            <th>Brand</th>
-                                            <th>Price</th>
-                                            <th>Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td><span class="product-id-badge">dr75280979</span></td>
-                                            <td>
-                                                <div class="product-title-cell">
-                                                    Spikeball 3 Ball Original Roundnet Game Set - Includes 3 Balls, net and Bag
-                                                </div>
-                                            </td>
-                                            <td>Sports & Outdoors</td>
-                                            <td>Spikeball</td>
-                                            <td><strong style="color:#ff9900; font-size:1.1rem;">$67.19</strong></td>
-                                            <td>
-                                                <div class="action-btns-cell">
-                                                    <button class="btn-3d-action btn-add-item"><i class="fas fa-plus"></i> Add to listing</button>
-                                                    <button class="btn-3d-action btn-fav-item"><i class="fas fa-bookmark"></i> Add to favorite</button>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                                <div class="responsive-table-wrapper">
+                                    <table class="find-table">
+                                        <thead>
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>Title</th>
+                                                <th>Category</th>
+                                                <th>Brand</th>
+                                                <th>Price</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td><span class="product-id-badge">dr75280979</span></td>
+                                                <td>
+                                                    <div class="product-title-cell">
+                                                        Spikeball 3 Ball Original Roundnet Game Set - Includes 3 Balls, net and Bag
+                                                    </div>
+                                                </td>
+                                                <td>Sports & Outdoors</td>
+                                                <td>Spikeball</td>
+                                                <td><strong style="color:#ff9900; font-size:1.1rem;">$67.19</strong></td>
+                                                <td>
+                                                    <div class="action-btns-cell">
+                                                        <button class="btn-3d-action btn-add-item"><i class="fas fa-plus"></i> Add to listing</button>
+                                                        <button class="btn-3d-action btn-fav-item"><i class="fas fa-bookmark"></i> Add to favorite</button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -1244,57 +1403,59 @@
                             </div>
 
                             <div class="listing-table-container">
-                                <table class="listing-table">
-                                    <thead>
-                                        <tr>
-                                            <th>ID</th>
-                                            <th>Title</th>
-                                            <th>Category</th>
-                                            <th>Brand</th>
-                                            <th>Price</th>
-                                            <th>Edit</th>
-                                            <th>Delete</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr class="listing-row">
-                                            <td><span class="listing-id-text">dr71918580</span></td>
-                                            <td><div class="listing-title-text">EastPoint Deluxe Steel Frame Axe Throw Target Game Set - Steel Frame for Indoors and Outdoors</div></td>
-                                            <td>Sports & Outdoors</td>
-                                            <td>EastPoint Sports</td>
-                                            <td><strong style="color:#ff9900;">$88.99</strong></td>
-                                            <td><div class="action-btns-row"><button class="btn-action-3d btn-edit-listing"><i class="fas fa-edit"></i></button></div></td>
-                                            <td><div class="action-btns-row"><button class="btn-action-3d btn-delete-listing"><i class="fas fa-trash-alt"></i></button></div></td>
-                                        </tr>
-                                        <tr class="listing-row">
-                                            <td><span class="listing-id-text">dr62387955</span></td>
-                                            <td><div class="listing-title-text">Kinghouse Garage Sports Equipment Organizer, Ball Storage Rack, Ball Storage Garage, Garage Organizer, Rolling Sports Ball Storage Cart, Black, Steel</div></td>
-                                            <td>Sports & Outdoors</td>
-                                            <td>Kinghouse</td>
-                                            <td><strong style="color:#ff9900;">$87.49</strong></td>
-                                            <td><div class="action-btns-row"><button class="btn-action-3d btn-edit-listing"><i class="fas fa-edit"></i></button></div></td>
-                                            <td><div class="action-btns-row"><button class="btn-action-3d btn-delete-listing"><i class="fas fa-trash-alt"></i></button></div></td>
-                                        </tr>
-                                        <tr class="listing-row">
-                                            <td><span class="listing-id-text">dr70886599</span></td>
-                                            <td><div class="listing-title-text">Complete Sports Balls w/Bag, Pump for Boys - Kickball, Volleyball, Soccer Ball, Football, Basketball - Outdoor Play</div></td>
-                                            <td>Sports & Outdoors</td>
-                                            <td>Easy Play Sports and Outdoors</td>
-                                            <td><strong style="color:#ff9900;">$64.98</strong></td>
-                                            <td><div class="action-btns-row"><button class="btn-action-3d btn-edit-listing"><i class="fas fa-edit"></i></button></div></td>
-                                            <td><div class="action-btns-row"><button class="btn-action-3d btn-delete-listing"><i class="fas fa-trash-alt"></i></button></div></td>
-                                        </tr>
-                                        <tr class="listing-row">
-                                            <td><span class="listing-id-text">dr75280979</span></td>
-                                            <td><div class="listing-title-text">Spikeball 3 Ball Original Roundnet Game Set - Includes 3 Balls, net and Bag</div></td>
-                                            <td>Sports & Outdoors</td>
-                                            <td>Spikeball</td>
-                                            <td><strong style="color:#ff9900;">$64.49</strong></td>
-                                            <td><div class="action-btns-row"><button class="btn-action-3d btn-edit-listing"><i class="fas fa-edit"></i></button></div></td>
-                                            <td><div class="action-btns-row"><button class="btn-action-3d btn-delete-listing"><i class="fas fa-trash-alt"></i></button></div></td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                                <div class="responsive-table-wrapper">
+                                    <table class="listing-table">
+                                        <thead>
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>Title</th>
+                                                <th>Category</th>
+                                                <th>Brand</th>
+                                                <th>Price</th>
+                                                <th>Edit</th>
+                                                <th>Delete</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr class="listing-row">
+                                                <td><span class="listing-id-text">dr71918580</span></td>
+                                                <td><div class="listing-title-text">EastPoint Deluxe Steel Frame Axe Throw Target Game Set - Steel Frame for Indoors and Outdoors</div></td>
+                                                <td>Sports & Outdoors</td>
+                                                <td>EastPoint Sports</td>
+                                                <td><strong style="color:#ff9900;">$88.99</strong></td>
+                                                <td><div class="action-btns-row"><button class="btn-action-3d btn-edit-listing"><i class="fas fa-edit"></i></button></div></td>
+                                                <td><div class="action-btns-row"><button class="btn-action-3d btn-delete-listing"><i class="fas fa-trash-alt"></i></button></div></td>
+                                            </tr>
+                                            <tr class="listing-row">
+                                                <td><span class="listing-id-text">dr62387955</span></td>
+                                                <td><div class="listing-title-text">Kinghouse Garage Sports Equipment Organizer, Ball Storage Rack, Ball Storage Garage, Garage Organizer, Rolling Sports Ball Storage Cart, Black, Steel</div></td>
+                                                <td>Sports & Outdoors</td>
+                                                <td>Kinghouse</td>
+                                                <td><strong style="color:#ff9900;">$87.49</strong></td>
+                                                <td><div class="action-btns-row"><button class="btn-action-3d btn-edit-listing"><i class="fas fa-edit"></i></button></div></td>
+                                                <td><div class="action-btns-row"><button class="btn-action-3d btn-delete-listing"><i class="fas fa-trash-alt"></i></button></div></td>
+                                            </tr>
+                                            <tr class="listing-row">
+                                                <td><span class="listing-id-text">dr70886599</span></td>
+                                                <td><div class="listing-title-text">Complete Sports Balls w/Bag, Pump for Boys - Kickball, Volleyball, Soccer Ball, Football, Basketball - Outdoor Play</div></td>
+                                                <td>Sports & Outdoors</td>
+                                                <td>Easy Play Sports and Outdoors</td>
+                                                <td><strong style="color:#ff9900;">$64.98</strong></td>
+                                                <td><div class="action-btns-row"><button class="btn-action-3d btn-edit-listing"><i class="fas fa-edit"></i></button></div></td>
+                                                <td><div class="action-btns-row"><button class="btn-action-3d btn-delete-listing"><i class="fas fa-trash-alt"></i></button></div></td>
+                                            </tr>
+                                            <tr class="listing-row">
+                                                <td><span class="listing-id-text">dr75280979</span></td>
+                                                <td><div class="listing-title-text">Spikeball 3 Ball Original Roundnet Game Set - Includes 3 Balls, net and Bag</div></td>
+                                                <td>Sports & Outdoors</td>
+                                                <td>Spikeball</td>
+                                                <td><strong style="color:#ff9900;">$64.49</strong></td>
+                                                <td><div class="action-btns-row"><button class="btn-action-3d btn-edit-listing"><i class="fas fa-edit"></i></button></div></td>
+                                                <td><div class="action-btns-row"><button class="btn-action-3d btn-delete-listing"><i class="fas fa-trash-alt"></i></button></div></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -1315,71 +1476,73 @@
                             </div>
 
                             <div class="orders-table-container">
-                                <table class="orders-table">
-                                    <thead>
-                                        <tr>
-                                            <th>Order date</th>
-                                            <th>Order details</th>
-                                            <th>Customer option</th>
-                                            <th>Order status</th>
-                                            <th>Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>
-                                                <span class="date-line">1 week ago</span>
-                                                <span class="sub-date">27-12-2025</span>
-                                                <span class="sub-date">04:05:22</span>
-                                            </td>
-                                            <td>
-                                                <span class="order-id-link">Order id: mX6yO8ihnUlx</span>
-                                                <span class="meta-text">Buyer Name:</span>
-                                                <span class="buyer-name">Charlotte M. Henderson</span>
-                                                <span class="meta-text">Fulfillment Method: <strong>Seller</strong></span>
-                                                <span class="meta-text">Sales Channel: <strong>Uviltro.com</strong></span>
-                                            </td>
-                                            <td>
-                                                <span class="option-main">Standard</span>
-                                                <span class="option-sub">Ship by date Dec 27, 2025 to Dec 28, 2025</span>
-                                                <span class="option-sub">Deliver by date Dec 29, 2025 to Jan 02, 2026</span>
-                                            </td>
-                                            <td><span class="status-pill-unshipped">Unshipped</span></td>
-                                            <td>
-                                                <div class="action-column">
-                                                    <button class="btn-ship-confirm">Confirm shipment</button>
-                                                    <button class="btn-cancel-ord">Cancel order</button>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <span class="date-line">1 week ago</span>
-                                                <span class="sub-date">27-12-2025</span>
-                                                <span class="sub-date">01:29:58</span>
-                                            </td>
-                                            <td>
-                                                <span class="order-id-link">Order id: ILBHAc239hPo</span>
-                                                <span class="meta-text">Buyer Name:</span>
-                                                <span class="buyer-name">Keith Jenkins</span>
-                                                <span class="meta-text">Fulfillment Method: <strong>Seller</strong></span>
-                                                <span class="meta-text">Sales Channel: <strong>Uviltro.com</strong></span>
-                                            </td>
-                                            <td>
-                                                <span class="option-main">Standard</span>
-                                                <span class="option-sub">Ship by date Dec 27, 2025 to Dec 28, 2025</span>
-                                                <span class="option-sub">Deliver by date Dec 29, 2025 to Jan 02, 2026</span>
-                                            </td>
-                                            <td><span class="status-pill-unshipped">Unshipped</span></td>
-                                            <td>
-                                                <div class="action-column">
-                                                    <button class="btn-ship-confirm">Confirm shipment</button>
-                                                    <button class="btn-cancel-ord">Cancel order</button>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                                <div class="responsive-table-wrapper">
+                                    <table class="orders-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Order date</th>
+                                                <th>Order details</th>
+                                                <th>Customer option</th>
+                                                <th>Order status</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    <span class="date-line">1 week ago</span>
+                                                    <span class="sub-date">27-12-2025</span>
+                                                    <span class="sub-date">04:05:22</span>
+                                                </td>
+                                                <td>
+                                                    <span class="order-id-link">Order id: mX6yO8ihnUlx</span>
+                                                    <span class="meta-text">Buyer Name:</span>
+                                                    <span class="buyer-name">Charlotte M. Henderson</span>
+                                                    <span class="meta-text">Fulfillment Method: <strong>Seller</strong></span>
+                                                    <span class="meta-text">Sales Channel: <strong>Uviltro.com</strong></span>
+                                                </td>
+                                                <td>
+                                                    <span class="option-main">Standard</span>
+                                                    <span class="option-sub">Ship by date Dec 27, 2025 to Dec 28, 2025</span>
+                                                    <span class="option-sub">Deliver by date Dec 29, 2025 to Jan 02, 2026</span>
+                                                </td>
+                                                <td><span class="status-pill-unshipped">Unshipped</span></td>
+                                                <td>
+                                                    <div class="action-column">
+                                                        <button class="btn-ship-confirm">Confirm shipment</button>
+                                                        <button class="btn-cancel-ord">Cancel order</button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <span class="date-line">1 week ago</span>
+                                                    <span class="sub-date">27-12-2025</span>
+                                                    <span class="sub-date">01:29:58</span>
+                                                </td>
+                                                <td>
+                                                    <span class="order-id-link">Order id: ILBHAc239hPo</span>
+                                                    <span class="meta-text">Buyer Name:</span>
+                                                    <span class="buyer-name">Keith Jenkins</span>
+                                                    <span class="meta-text">Fulfillment Method: <strong>Seller</strong></span>
+                                                    <span class="meta-text">Sales Channel: <strong>Uviltro.com</strong></span>
+                                                </td>
+                                                <td>
+                                                    <span class="option-main">Standard</span>
+                                                    <span class="option-sub">Ship by date Dec 27, 2025 to Dec 28, 2025</span>
+                                                    <span class="option-sub">Deliver by date Dec 29, 2025 to Jan 02, 2026</span>
+                                                </td>
+                                                <td><span class="status-pill-unshipped">Unshipped</span></td>
+                                                <td>
+                                                    <div class="action-column">
+                                                        <button class="btn-ship-confirm">Confirm shipment</button>
+                                                        <button class="btn-cancel-ord">Cancel order</button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -1399,23 +1562,25 @@
                             </div>
 
                             <div class="orders-table-container">
-                                <table class="orders-table">
-                                    <thead>
-                                        <tr>
-                                            <th>Ship date</th>
-                                            <th>Order Details</th>
-                                            <th>Customer option</th>
-                                            <th>Ship Via</th>
-                                            <th>Order status</th>
-                                            <th>Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td colspan="6" class="empty-table-msg">No data available in table</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                                <div class="responsive-table-wrapper">
+                                    <table class="orders-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Ship date</th>
+                                                <th>Order Details</th>
+                                                <th>Customer option</th>
+                                                <th>Ship Via</th>
+                                                <th>Order status</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td colspan="6" class="empty-table-msg">No data available in table</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
 
                             <div class="pagination-footer">
@@ -1444,74 +1609,76 @@
                             </div>
 
                             <div class="orders-table-container">
-                                <table class="orders-table">
-                                    <thead>
-                                        <tr>
-                                            <th>Warehouse Name</th>
-                                            <th>Location</th>
-                                            <th>Inventory Count</th>
-                                            <th>Capacity (%)</th>
-                                            <th>Status</th>
-                                            <th>Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td><strong style="color:white; font-size:1rem;">US-East-NY01</strong></td>
-                                            <td><div style="color:#cdd9ff;">New York, United States</div></td>
-                                            <td><div style="font-weight:700;">45,280 Units</div></td>
-                                            <td>
-                                                <div style="display:flex; flex-direction:column; gap:6px;">
-                                                    <span style="font-size:0.85rem; color:#ff9900; font-weight:700;">72% Filled</span>
-                                                    <div class="capacity-bar-3d"><div class="capacity-fill-3d" style="width:72%;"></div></div>
-                                                </div>
-                                            </td>
-                                            <td><span class="status-pill-operating">Operating</span></td>
-                                            <td>
-                                                <div class="action-column">
-                                                    <button class="btn-manage-ware">Manage Inventory</button>
-                                                    <button class="btn-settings-ware">Settings</button>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td><strong style="color:white; font-size:1rem;">UK-LDN-FULFILL</strong></td>
-                                            <td><div style="color:#cdd9ff;">London, United Kingdom</div></td>
-                                            <td><div style="font-weight:700;">22,104 Units</div></td>
-                                            <td>
-                                                <div style="display:flex; flex-direction:column; gap:6px;">
-                                                    <span style="font-size:0.85rem; color:#ff9900; font-weight:700;">38% Filled</span>
-                                                    <div class="capacity-bar-3d"><div class="capacity-fill-3d" style="width:38%;"></div></div>
-                                                </div>
-                                            </td>
-                                            <td><span class="status-pill-operating">Operating</span></td>
-                                            <td>
-                                                <div class="action-column">
-                                                    <button class="btn-manage-ware">Manage Inventory</button>
-                                                    <button class="btn-settings-ware">Settings</button>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td><strong style="color:white; font-size:1rem;">CN-SZ-GLOBAL-HUB</strong></td>
-                                            <td><div style="color:#cdd9ff;">Shenzhen, China</div></td>
-                                            <td><div style="font-weight:700;">98,750 Units</div></td>
-                                            <td>
-                                                <div style="display:flex; flex-direction:column; gap:6px;">
-                                                    <span style="font-size:0.85rem; color:#f87171; font-weight:700;">95% Filled</span>
-                                                    <div class="capacity-bar-3d"><div class="capacity-fill-3d" style="width:95%; background:linear-gradient(90deg, #f87171, #ff8866); box-shadow:0 0 10px rgba(248,113,113,0.5);"></div></div>
-                                                </div>
-                                            </td>
-                                            <td><span class="status-pill-full">Near Full</span></td>
-                                            <td>
-                                                <div class="action-column">
-                                                    <button class="btn-manage-ware">Manage Inventory</button>
-                                                    <button class="btn-settings-ware">Settings</button>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                                <div class="responsive-table-wrapper">
+                                    <table class="orders-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Warehouse Name</th>
+                                                <th>Location</th>
+                                                <th>Inventory Count</th>
+                                                <th>Capacity (%)</th>
+                                                <th>Status</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td><strong style="color:white; font-size:1rem;">US-East-NY01</strong></td>
+                                                <td><div style="color:#cdd9ff;">New York, United States</div></td>
+                                                <td><div style="font-weight:700;">45,280 Units</div></td>
+                                                <td>
+                                                    <div style="display:flex; flex-direction:column; gap:6px;">
+                                                        <span style="font-size:0.85rem; color:#ff9900; font-weight:700;">72% Filled</span>
+                                                        <div class="capacity-bar-3d"><div class="capacity-fill-3d" style="width:72%;"></div></div>
+                                                    </div>
+                                                </td>
+                                                <td><span class="status-pill-operating">Operating</span></td>
+                                                <td>
+                                                    <div class="action-column">
+                                                        <button class="btn-manage-ware">Manage Inventory</button>
+                                                        <button class="btn-settings-ware">Settings</button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong style="color:white; font-size:1rem;">UK-LDN-FULFILL</strong></td>
+                                                <td><div style="color:#cdd9ff;">London, United Kingdom</div></td>
+                                                <td><div style="font-weight:700;">22,104 Units</div></td>
+                                                <td>
+                                                    <div style="display:flex; flex-direction:column; gap:6px;">
+                                                        <span style="font-size:0.85rem; color:#ff9900; font-weight:700;">38% Filled</span>
+                                                        <div class="capacity-bar-3d"><div class="capacity-fill-3d" style="width:38%;"></div></div>
+                                                    </div>
+                                                </td>
+                                                <td><span class="status-pill-operating">Operating</span></td>
+                                                <td>
+                                                    <div class="action-column">
+                                                        <button class="btn-manage-ware">Manage Inventory</button>
+                                                        <button class="btn-settings-ware">Settings</button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong style="color:white; font-size:1rem;">CN-SZ-GLOBAL-HUB</strong></td>
+                                                <td><div style="color:#cdd9ff;">Shenzhen, China</div></td>
+                                                <td><div style="font-weight:700;">98,750 Units</div></td>
+                                                <td>
+                                                    <div style="display:flex; flex-direction:column; gap:6px;">
+                                                        <span style="font-size:0.85rem; color:#f87171; font-weight:700;">95% Filled</span>
+                                                        <div class="capacity-bar-3d"><div class="capacity-fill-3d" style="width:95%; background:linear-gradient(90deg, #f87171, #ff8866); box-shadow:0 0 10px rgba(248,113,113,0.5);"></div></div>
+                                                    </div>
+                                                </td>
+                                                <td><span class="status-pill-full">Near Full</span></td>
+                                                <td>
+                                                    <div class="action-column">
+                                                        <button class="btn-manage-ware">Manage Inventory</button>
+                                                        <button class="btn-settings-ware">Settings</button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -1545,40 +1712,42 @@
                             </div>
 
                             <div class="orders-table-container">
-                                <table class="orders-table">
-                                    <thead>
-                                        <tr>
-                                            <th>Date</th>
-                                            <th>Transaction ID</th>
-                                            <th>Type</th>
-                                            <th>Amount</th>
-                                            <th>Status</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td><div style="font-weight:600; color:white;">Dec 27, 2025</div><div style="font-size:0.8rem; color:#cdd9ff; opacity:0.7;">02:15 PM</div></td>
-                                            <td><span style="font-family:monospace; color:#ff9900;">TRX-99281745</span></td>
-                                            <td><div style="font-weight:600;">Sales Payout</div></td>
-                                            <td><strong style="color:#34d399; font-size:1.1rem;">+$64.49</strong></td>
-                                            <td><span class="status-success">Success</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td><div style="font-weight:600; color:white;">Dec 26, 2025</div><div style="font-size:0.8rem; color:#cdd9ff; opacity:0.7;">11:45 AM</div></td>
-                                            <td><span style="font-family:monospace; color:#ff9900;">TRX-99281632</span></td>
-                                            <td><div style="font-weight:600;">Withdrawal to Bank</div></td>
-                                            <td><strong style="color:#f87171; font-size:1.1rem;">-$5,000.00</strong></td>
-                                            <td><span class="status-processing">Processing</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td><div style="font-weight:600; color:white;">Dec 26, 2025</div><div style="font-size:0.8rem; color:#cdd9ff; opacity:0.7;">09:10 AM</div></td>
-                                            <td><span style="font-family:monospace; color:#ff9900;">TRX-99281510</span></td>
-                                            <td><div style="font-weight:600;">Sales Payout</div></td>
-                                            <td><strong style="color:#34d399; font-size:1.1rem;">+$128.98</strong></td>
-                                            <td><span class="status-success">Success</span></td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                                <div class="responsive-table-wrapper">
+                                    <table class="orders-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Date</th>
+                                                <th>Transaction ID</th>
+                                                <th>Type</th>
+                                                <th>Amount</th>
+                                                <th>Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td><div style="font-weight:600; color:white;">Dec 27, 2025</div><div style="font-size:0.8rem; color:#cdd9ff; opacity:0.7;">02:15 PM</div></td>
+                                                <td><span style="font-family:monospace; color:#ff9900;">TRX-99281745</span></td>
+                                                <td><div style="font-weight:600;">Sales Payout</div></td>
+                                                <td><strong style="color:#34d399; font-size:1.1rem;">+$64.49</strong></td>
+                                                <td><span class="status-success">Success</span></td>
+                                            </tr>
+                                            <tr>
+                                                <td><div style="font-weight:600; color:white;">Dec 26, 2025</div><div style="font-size:0.8rem; color:#cdd9ff; opacity:0.7;">11:45 AM</div></td>
+                                                <td><span style="font-family:monospace; color:#ff9900;">TRX-99281632</span></td>
+                                                <td><div style="font-weight:600;">Withdrawal to Bank</div></td>
+                                                <td><strong style="color:#f87171; font-size:1.1rem;">-$5,000.00</strong></td>
+                                                <td><span class="status-processing">Processing</span></td>
+                                            </tr>
+                                            <tr>
+                                                <td><div style="font-weight:600; color:white;">Dec 26, 2025</div><div style="font-size:0.8rem; color:#cdd9ff; opacity:0.7;">09:10 AM</div></td>
+                                                <td><span style="font-family:monospace; color:#ff9900;">TRX-99281510</span></td>
+                                                <td><div style="font-weight:600;">Sales Payout</div></td>
+                                                <td><strong style="color:#34d399; font-size:1.1rem;">+$128.98</strong></td>
+                                                <td><span class="status-success">Success</span></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -1714,43 +1883,45 @@
                             </div>
 
                             <div class="orders-table-container">
-                                <table class="orders-table">
-                                    <thead>
-                                        <tr>
-                                            <th>Method</th>
-                                            <th>Card Information</th>
-                                            <th>Expiry</th>
-                                            <th>Status</th>
-                                            <th>Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td><i class="fab fa-cc-visa" style="font-size:1.8rem; color:#fff;"></i></td>
-                                            <td><div style="font-weight:700; color:white;">Visa Debit Card</div><div style="font-size:0.85rem; color:#ff9900;">Ending in 8824</div></td>
-                                            <td><div style="font-weight:600;">12 / 2028</div></td>
-                                            <td><span class="status-success" style="background:rgba(255,153,0,0.1); color:#ff9900; border-color:rgba(255,153,0,0.3);">Primary</span></td>
-                                            <td>
-                                                <div class="action-column">
-                                                    <button class="btn-primary-3d">Edit Details</button>
-                                                    <button class="btn-cancel-ord" style="padding:6px 12px; font-size:0.75rem;">Delete</button>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td><i class="fab fa-cc-mastercard" style="font-size:1.8rem; color:#fff;"></i></td>
-                                            <td><div style="font-weight:700; color:white;">Mastercard Business</div><div style="font-size:0.85rem; color:#cdd9ff; opacity:0.7;">Ending in 4492</div></td>
-                                            <td><div style="font-weight:600;">05 / 2027</div></td>
-                                            <td><span style="color:#cdd9ff; opacity:0.6; font-size:0.8rem; font-weight:700;">Backup</span></td>
-                                            <td>
-                                                <div class="action-column">
-                                                    <button class="btn-primary-3d">Set as Primary</button>
-                                                    <button class="btn-cancel-ord" style="padding:6px 12px; font-size:0.75rem;">Delete</button>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                                <div class="responsive-table-wrapper">
+                                    <table class="orders-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Method</th>
+                                                <th>Card Information</th>
+                                                <th>Expiry</th>
+                                                <th>Status</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td><i class="fab fa-cc-visa" style="font-size:1.8rem; color:#fff;"></i></td>
+                                                <td><div style="font-weight:700; color:white;">Visa Debit Card</div><div style="font-size:0.85rem; color:#ff9900;">Ending in 8824</div></td>
+                                                <td><div style="font-weight:600;">12 / 2028</div></td>
+                                                <td><span class="status-success" style="background:rgba(255,153,0,0.1); color:#ff9900; border-color:rgba(255,153,0,0.3);">Primary</span></td>
+                                                <td>
+                                                    <div class="action-column">
+                                                        <button class="btn-primary-3d">Edit Details</button>
+                                                        <button class="btn-cancel-ord" style="padding:6px 12px; font-size:0.75rem;">Delete</button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td><i class="fab fa-cc-mastercard" style="font-size:1.8rem; color:#fff;"></i></td>
+                                                <td><div style="font-weight:700; color:white;">Mastercard Business</div><div style="font-size:0.85rem; color:#cdd9ff; opacity:0.7;">Ending in 4492</div></td>
+                                                <td><div style="font-weight:600;">05 / 2027</div></td>
+                                                <td><span style="color:#cdd9ff; opacity:0.6; font-size:0.8rem; font-weight:700;">Backup</span></td>
+                                                <td>
+                                                    <div class="action-column">
+                                                        <button class="btn-primary-3d">Set as Primary</button>
+                                                        <button class="btn-cancel-ord" style="padding:6px 12px; font-size:0.75rem;">Delete</button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
 
                             <button class="btn-add-card">
@@ -1779,6 +1950,11 @@
         const matchingKey = Object.keys(views).find(k => views[k] === viewId);
         if(matchingKey) {
             document.querySelectorAll(`.nav-item-3d[data-view="${matchingKey}"]`).forEach(n => n.classList.add('active'));
+        }
+        
+        // Auto-close sidebar on mobile after clicking a menu item
+        if(window.innerWidth <= 768) {
+            closeSidebar();
         }
     }
     document.querySelectorAll('.nav-item-3d[data-view]').forEach(btn => {
@@ -1845,34 +2021,26 @@
     });
 
     activateView('dashboardView');
-    // optional mobile toggle (hamburger)
-    const isMobile = window.matchMedia("(max-width: 720px)").matches;
-    if(isMobile) {
-        const sidebar = document.getElementById('fixedSidebar');
-        const bodyEl = document.body;
-        const createToggle = () => {
-            const btn = document.createElement('div');
-            btn.id = "mobileMenuBtn";
-            btn.style.position = "fixed";
-            btn.style.top = "20px";
-            btn.style.left = "20px";
-            btn.style.zIndex = "1200";
-            btn.style.backgroundColor = "#ff9900";
-            btn.style.padding = "12px 16px";
-            btn.style.borderRadius = "30px";
-            btn.style.color = "black";
-            btn.style.cursor = "pointer";
-            btn.style.boxShadow = "0 5px 15px rgba(0,0,0,0.3)";
-            btn.innerHTML = '<i class="fas fa-bars"></i>';
-            document.body.appendChild(btn);
-            btn.addEventListener('click', () => {
-                sidebar.classList.toggle('mobile-open');
-            });
-        };
-        createToggle();
-        sidebar.classList.add('mobile-open'); // start open? better close default for mobile
-        sidebar.classList.remove('mobile-open');
+    
+    // Sidebar Toggle Logic
+    const sidebar = document.getElementById('fixedSidebar');
+    const overlay = document.getElementById('sidebarOverlay');
+    const menuToggle = document.getElementById('mobileMenuToggle');
+    
+    function openSidebar() {
+        sidebar.classList.add('mobile-open');
+        overlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
     }
+    
+    function closeSidebar() {
+        sidebar.classList.remove('mobile-open');
+        overlay.classList.remove('active');
+        document.body.style.overflow = '';
+    }
+    
+    menuToggle.addEventListener('click', openSidebar);
+    overlay.addEventListener('click', closeSidebar);
 </script>
 </body>
 </html>
