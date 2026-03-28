@@ -1108,6 +1108,26 @@
             }
         }
 
+        .menu-toggle-btn {
+            display: none;
+            background: rgba(255, 153, 0, 0.1);
+            border: 1px solid rgba(255, 153, 0, 0.3);
+            color: #ff9900;
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
+            cursor: pointer;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            transition: all 0.3s;
+            margin-right: 15px;
+        }
+        .menu-toggle-btn:hover {
+            background: rgba(255, 153, 0, 0.2);
+            transform: translateY(-2px);
+        }
+
         @media (max-width: 1024px) {
             .hero-floating {
                 flex-direction: column;
@@ -1936,12 +1956,34 @@
 </div>
 
 <script>
+    // GLOBAL ELEMENTS
+    const sidebar = document.getElementById('fixedSidebar');
+    const overlay = document.getElementById('sidebarOverlay');
+    const menuToggle = document.getElementById('mobileMenuToggle');
+
     // VIEW ROUTING
     const views = {
         dashboard: 'dashboardView', addProducts: 'addProductsView', storeListing: 'storeListingView',
         orderCenter: 'orderCenterView', '3pl': '3plView', warehouses: 'warehousesView',
         wallet: 'walletView', statistics: 'statisticsView', payment: 'paymentView'
     };
+
+    function openSidebar() {
+        if(sidebar && overlay) {
+            sidebar.classList.add('mobile-open');
+            overlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+    }
+    
+    function closeSidebar() {
+        if(sidebar && overlay) {
+            sidebar.classList.remove('mobile-open');
+            overlay.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+    }
+
     function activateView(viewId) {
         Object.values(views).forEach(v => { const el = document.getElementById(v); if(el) { el.classList.add('hidden-view'); el.classList.remove('active-view'); } });
         const active = document.getElementById(viewId);
@@ -1957,20 +1999,26 @@
             closeSidebar();
         }
     }
+
     document.querySelectorAll('.nav-item-3d[data-view]').forEach(btn => {
         btn.addEventListener('click', (e) => { const viewKey = btn.getAttribute('data-view'); if(views[viewKey]) activateView(views[viewKey]); });
     });
+
+    // Sidebar Toggle Listeners
+    if(menuToggle) menuToggle.addEventListener('click', openSidebar);
+    if(overlay) overlay.addEventListener('click', closeSidebar);
+
     // dropdown toggle fix
     document.querySelectorAll('.dropdown-toggle').forEach(toggle => {
         toggle.addEventListener('click', function(e) {
-            const sidebar = this.closest('.sidebar-nexus');
+            const sidebarEl = this.closest('.sidebar-nexus');
             const submenu = this.nextElementSibling;
             if (submenu && submenu.classList.contains('submenu-3d')) {
                 const isOpen = submenu.classList.contains('open');
                 
                 // Close other submenus (optional, but good for UX)
-                sidebar.querySelectorAll('.submenu-3d').forEach(s => s.classList.remove('open'));
-                sidebar.querySelectorAll('.dropdown-toggle').forEach(t => t.classList.remove('open'));
+                sidebarEl.querySelectorAll('.submenu-3d').forEach(s => s.classList.remove('open'));
+                sidebarEl.querySelectorAll('.dropdown-toggle').forEach(t => t.classList.remove('open'));
                 
                 if (!isOpen) { 
                     submenu.classList.add('open');
@@ -2015,32 +2063,12 @@
         setTheme(true);
     }
 
-    themeToggle.addEventListener('click', () => {
+    themeToggle?.addEventListener('click', () => {
         const isLight = body.classList.contains('light-mode');
         setTheme(!isLight);
     });
 
     activateView('dashboardView');
-    
-    // Sidebar Toggle Logic
-    const sidebar = document.getElementById('fixedSidebar');
-    const overlay = document.getElementById('sidebarOverlay');
-    const menuToggle = document.getElementById('mobileMenuToggle');
-    
-    function openSidebar() {
-        sidebar.classList.add('mobile-open');
-        overlay.classList.add('active');
-        document.body.style.overflow = 'hidden';
-    }
-    
-    function closeSidebar() {
-        sidebar.classList.remove('mobile-open');
-        overlay.classList.remove('active');
-        document.body.style.overflow = '';
-    }
-    
-    menuToggle.addEventListener('click', openSidebar);
-    overlay.addEventListener('click', closeSidebar);
 </script>
 </body>
 </html>
