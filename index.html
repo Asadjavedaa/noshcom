@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
     <title>Noshahi Ecom</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -46,21 +46,24 @@
             box-sizing: border-box;
         }
 
-        body {
+        html, body {
+            width: 100%;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
             background: var(--bg-main);
             font-family: 'Inter', sans-serif;
             min-height: 100vh;
-            overflow-x: hidden;
             color: var(--text-primary);
             transition: background var(--transition-speed) ease, color var(--transition-speed) ease;
         }
 
-        /* --- NEW LAYOUT: FIXED SIDEBAR + SCROLLABLE MAIN CONTENT --- */
         .app-layout {
             display: flex;
             min-height: 100vh;
             position: relative;
             width: 100%;
+            overflow-x: hidden;
         }
 
         /* Mobile Overlay */
@@ -475,13 +478,15 @@
             border-radius: 50px;
         }
         .tab-3d {
-            padding: 8px 20px;
+            padding: 8px 16px;
             border-radius: 40px;
             font-weight: 600;
             background: transparent;
             color: #aaa;
             cursor: pointer;
             transition: 0.2s;
+            font-size: 0.9rem;
+            white-space: nowrap;
         }
         .tab-3d.active-tab {
             background: #ff9900;
@@ -1133,18 +1138,28 @@
                 flex-direction: column;
                 gap: 20px;
                 text-align: center;
+                padding: 25px;
             }
             .hero-left {
                 flex-direction: column;
+                gap: 15px;
             }
             .hero-right {
                 justify-content: center;
+                gap: 15px;
             }
             .metrics-grid-3d {
                 grid-template-columns: 1fr;
             }
             .search-3d {
                 width: 200px;
+            }
+            .stats-title-3d {
+                font-size: 1.6rem;
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 10px;
+                text-align: center;
             }
         }
 
@@ -1155,9 +1170,24 @@
             .prism-grid {
                 grid-template-columns: 1fr;
             }
+            .stats-header {
+                flex-direction: column;
+                gap: 15px;
+                align-items: center;
+                text-align: center;
+            }
+            .tabs-group {
+                width: 100%;
+                justify-content: center;
+            }
             .visual-card-3d {
                 width: 100%;
-                max-width: 400px;
+                max-width: 360px;
+                transform: none !important;
+            }
+            .find-products-container, .listing-hero-container, .orders-hero-container, .verification-hero-container, .warehouse-hero-container, .wallet-hero-container, .stats-hero-container, .payment-hero-container {
+                padding: 25px;
+                transform: none !important;
             }
         }
 
@@ -1170,7 +1200,7 @@
                 border-radius: 0;
                 width: 280px;
                 box-shadow: none;
-                z-index: 1001;
+                z-index: 1100;
             }
             .sidebar-nexus.mobile-open {
                 transform: translateX(0);
@@ -1178,80 +1208,124 @@
             }
             .main-scroll-area {
                 margin-left: 0;
-                padding: 18px;
+                padding: 15px;
+                width: 100%;
+                perspective: none;
             }
             .header-3d-card {
-                padding: 12px 18px;
-                border-radius: 1.5rem;
+                padding: 10px 15px;
+                border-radius: 1.2rem;
+                flex-wrap: wrap;
+                transform: none !important;
             }
             .user-profile-3d {
-                gap: 12px;
+                gap: 6px;
+                width: auto;
+                justify-content: flex-end;
             }
             .badge-notif {
-                width: 38px;
-                height: 38px;
-                border-radius: 12px;
+                width: 32px;
+                height: 32px;
+                border-radius: 8px;
             }
-            .country-pill span {
-                display: none;
+            .country-pill {
+                padding: 5px 10px;
+                font-size: 0.75rem;
+                gap: 5px;
             }
             .avatar-3d {
-                width: 40px;
-                height: 40px;
-                border-radius: 12px;
+                width: 32px;
+                height: 32px;
+                border-radius: 8px;
+            }
+            .hero-floating {
+                padding: 20px;
+                transform: none !important;
             }
             .hero-title h2 {
-                font-size: 1.5rem;
+                font-size: 1.3rem;
             }
             .stat-number {
-                font-size: 2.5rem;
+                font-size: 2.2rem;
             }
             .revenue-double {
                 grid-template-columns: 1fr;
+                gap: 15px;
             }
             .balance-cards-row {
                 grid-template-columns: 1fr;
+                gap: 15px;
             }
             .kpi-val {
-                font-size: 1.8rem;
+                font-size: 1.6rem;
             }
             .chart-main-panel {
-                padding: 20px;
+                padding: 15px;
+                transform: none !important;
             }
-            .bars-container {
-                gap: 8px;
-            }
-            .bar-label {
-                font-size: 0.65rem;
+            .prism-card, .metal-card, .cube-metric, .kpi-card-3d {
+                transform: none !important;
             }
         }
 
         @media (max-width: 480px) {
             .hero-title h2 {
-                font-size: 1.25rem;
+                font-size: 1.1rem;
             }
             .hero-floating {
-                padding: 20px;
+                padding: 15px;
             }
             .prism-card, .metal-card {
-                padding: 20px;
+                padding: 15px;
             }
             .stat-number {
-                font-size: 2rem;
+                font-size: 1.8rem;
             }
             .kpi-card-3d {
-                padding: 18px;
+                padding: 15px;
             }
             .kpi-val {
-                font-size: 1.5rem;
+                font-size: 1.3rem;
             }
             .visual-card-3d {
-                height: 220px;
-                padding: 20px;
+                height: 180px;
+                padding: 15px;
+                width: 100%;
+                transform: none !important;
             }
             .card-number-3d {
-                font-size: 1.2rem;
-                letter-spacing: 2px;
+                font-size: 1rem;
+                letter-spacing: 1px;
+                margin-bottom: 12px;
+            }
+            .card-chip {
+                width: 40px;
+                height: 28px;
+                margin-bottom: 15px;
+            }
+            .stats-title-3d {
+                font-size: 1.3rem;
+                text-align: center;
+            }
+            .find-products-title, .listing-hero-title, .orders-hero-title, .verification-hero-title, .wallet-title-3d {
+                font-size: 1.25rem;
+                flex-wrap: wrap;
+                line-height: 1.3;
+            }
+            .tab-3d {
+                padding: 5px 10px;
+                font-size: 0.75rem;
+            }
+            .tabs-group {
+                gap: 4px;
+                padding: 4px;
+            }
+            .search-hero-inner input {
+                font-size: 1rem;
+            }
+            .search-hero-btn {
+                width: 44px;
+                height: 44px;
             }
         }
         .hidden-view { display: none; }
@@ -1278,9 +1352,9 @@
             <div class="dropdown-3d">
                 <div class="nav-item-3d dropdown-toggle"><i class="fas fa-receipt"></i><span>Withdrawals</span><i class="fas fa-chevron-down" style="margin-left:auto;"></i></div>
                 <div class="submenu-3d">
-                    <div class="sub-item-3d">Seller Wallet</div>
-                    <div class="sub-item-3d">Pending Payouts</div>
-                    <div class="sub-item-3d">Complete Payouts</div>
+                    <div class="sub-item-3d" data-view="sellerWallet">Seller Wallet</div>
+                    <div class="sub-item-3d" data-view="pendingPayouts">Pending Payouts</div>
+                    <div class="sub-item-3d" data-view="completePayouts">Complete Payouts</div>
                 </div>
             </div>
             <div class="nav-item-3d" data-view="statistics"><i class="fas fa-chart-pie"></i><span>Statistics</span></div>
@@ -1949,6 +2023,140 @@
                             </button>
                         </div>
                     </div>
+
+                    <!-- SELLER WALLET (EXTENDED) -->
+                    <div id="sellerWalletExtView" class="hidden-view">
+                        <div class="wallet-hero-container">
+                            <h1 class="stats-title-3d" style="margin-bottom:30px;"><i class="fas fa-vault"></i> Seller Revenue Wallet</h1>
+                            <div class="balance-cards-row">
+                                <div class="balance-card-3d">
+                                    <div class="balance-label">Withdrawable Funds</div>
+                                    <div class="balance-amount">$14,250.60</div>
+                                    <div class="balance-meta">Net available balance</div>
+                                </div>
+                                <div class="balance-card-3d">
+                                    <div class="balance-label">Uncleared Revenue</div>
+                                    <div class="balance-amount">$2,105.00</div>
+                                    <div class="balance-meta">From orders in last 48 hours</div>
+                                </div>
+                                <div class="balance-card-3d">
+                                    <div class="balance-label">Reserved Amount</div>
+                                    <div class="balance-amount">$500.00</div>
+                                    <div class="balance-meta">A/C reserve policy</div>
+                                </div>
+                            </div>
+                            <div class="chart-main-panel" style="min-height: auto; padding: 30px;">
+                                <h3 style="color:white; margin-bottom:20px;">Request Instant Payout</h3>
+                                <p style="color:#cdd9ff; margin-bottom:25px; opacity:0.8;">You can withdraw up to 100% of your available balance directly to your bank or card.</p>
+                                <div style="display:flex; gap:15px; flex-wrap:wrap;">
+                                    <div style="flex:1; min-width:200px; background:rgba(0,0,0,0.3); padding:15px; border-radius:15px; border:1px solid rgba(255,153,0,0.2);">
+                                        <label style="display:block; color:#ff9900; font-size:0.8rem; margin-bottom:8px;">Amount to Withdraw</label>
+                                        <input type="number" value="14250.60" style="background:transparent; border:none; color:white; font-size:1.5rem; font-weight:800; width:100%; outline:none;">
+                                    </div>
+                                    <button class="btn-add-card" style="margin:0; height:auto; padding:0 40px;">Initiate Transfer</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- PENDING PAYOUTS -->
+                    <div id="pendingPayoutsView" class="hidden-view">
+                        <div class="verification-hero-container">
+                            <h1 class="stats-title-3d" style="margin-bottom:20px;"><i class="fas fa-hourglass-half"></i> Pending Payouts</h1>
+                            <p class="orders-hero-subtitle" style="text-align:left; margin-left:0;">Funds that are currently being verified or processed by the banking system.</p>
+                            
+                            <div class="orders-table-container">
+                                <div class="responsive-table-wrapper">
+                                    <table class="orders-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Requested Date</th>
+                                                <th>Payout ID</th>
+                                                <th>Method</th>
+                                                <th>Amount</th>
+                                                <th>ETA</th>
+                                                <th>Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td><div style="font-weight:600; color:white;">Today</div><div style="font-size:0.8rem; opacity:0.6;">09:12 AM</div></td>
+                                                <td><span class="product-id-badge">PAY-7728</span></td>
+                                                <td>Visa (8824)</td>
+                                                <td><strong style="color:white;">$5,000.00</strong></td>
+                                                <td><span style="color:#ffcc80;">2 Business Days</span></td>
+                                                <td><span class="status-processing" style="padding: 5px 12px; border-radius: 8px;">In Verification</span></td>
+                                            </tr>
+                                            <tr>
+                                                <td><div style="font-weight:600; color:white;">Yesterday</div><div style="font-size:0.8rem; opacity:0.6;">04:45 PM</div></td>
+                                                <td><span class="product-id-badge">PAY-7715</span></td>
+                                                <td>Standard Bank</td>
+                                                <td><strong style="color:white;">$2,450.00</strong></td>
+                                                <td><span style="color:#ffcc80;">Today</span></td>
+                                                <td><span class="status-processing" style="padding: 5px 12px; border-radius: 8px;">Processing</span></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- COMPLETE PAYOUTS -->
+                    <div id="completePayoutsView" class="hidden-view">
+                        <div class="listing-hero-container">
+                            <h1 class="stats-title-3d" style="margin-bottom:20px;"><i class="fas fa-circle-check"></i> Complete Payouts</h1>
+                            <p class="orders-hero-subtitle" style="text-align:left; margin-left:0;">Historical record of all successfully transferred funds to your verified payment methods.</p>
+
+                            <div class="orders-table-container">
+                                <div class="responsive-table-wrapper">
+                                    <table class="orders-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Completion Date</th>
+                                                <th>Transfer Details</th>
+                                                <th>Amount</th>
+                                                <th>Reference</th>
+                                                <th>Receipt</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td><div style="font-weight:600; color:white;">Mar 25, 2026</div></td>
+                                                <td>
+                                                    <span style="display:block; font-weight:700; color:#818cf8;">Direct Bank Transfer</span>
+                                                    <span style="display:block; font-size:0.85rem; opacity:0.7;">Bank Account: **** 9012</span>
+                                                </td>
+                                                <td><strong style="color:#34d399; font-size:1.1rem;">$8,200.00</strong></td>
+                                                <td><span style="font-family:monospace; color:#ff9900;">#998177215</span></td>
+                                                <td><button class="btn-primary-3d" style="padding:5px 12px;"><i class="fas fa-file-pdf"></i> Download</button></td>
+                                            </tr>
+                                            <tr>
+                                                <td><div style="font-weight:600; color:white;">Mar 20, 2026</div></td>
+                                                <td>
+                                                    <span style="display:block; font-weight:700; color:#818cf8;">Instant Visa Payout</span>
+                                                    <span style="display:block; font-size:0.85rem; opacity:0.7;">Card: Visa Ending 8824</span>
+                                                </td>
+                                                <td><strong style="color:#34d399; font-size:1.1rem;">$1,150.40</strong></td>
+                                                <td><span style="font-family:monospace; color:#ff9900;">#998165402</span></td>
+                                                <td><button class="btn-primary-3d" style="padding:5px 12px;"><i class="fas fa-file-pdf"></i> Download</button></td>
+                                            </tr>
+                                            <tr>
+                                                <td><div style="font-weight:600; color:white;">Mar 15, 2026</div></td>
+                                                <td>
+                                                    <span style="display:block; font-weight:700; color:#818cf8;">Direct Bank Transfer</span>
+                                                    <span style="display:block; font-size:0.85rem; opacity:0.7;">Bank Account: **** 9012</span>
+                                                </td>
+                                                <td><strong style="color:#34d399; font-size:1.1rem;">$5,400.00</strong></td>
+                                                <td><span style="font-family:monospace; color:#ff9900;">#998155981</span></td>
+                                                <td><button class="btn-primary-3d" style="padding:5px 12px;"><i class="fas fa-file-pdf"></i> Download</button></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </main>
             </div>
         </div>
@@ -1965,7 +2173,8 @@
     const views = {
         dashboard: 'dashboardView', addProducts: 'addProductsView', storeListing: 'storeListingView',
         orderCenter: 'orderCenterView', '3pl': '3plView', warehouses: 'warehousesView',
-        wallet: 'walletView', statistics: 'statisticsView', payment: 'paymentView'
+        wallet: 'walletView', statistics: 'statisticsView', payment: 'paymentView',
+        sellerWallet: 'sellerWalletExtView', pendingPayouts: 'pendingPayoutsView', completePayouts: 'completePayoutsView'
     };
 
     function openSidebar() {
@@ -2000,8 +2209,12 @@
         }
     }
 
-    document.querySelectorAll('.nav-item-3d[data-view]').forEach(btn => {
-        btn.addEventListener('click', (e) => { const viewKey = btn.getAttribute('data-view'); if(views[viewKey]) activateView(views[viewKey]); });
+    document.querySelectorAll('.nav-item-3d[data-view], .sub-item-3d[data-view]').forEach(btn => {
+        btn.addEventListener('click', (e) => { 
+            const viewKey = btn.getAttribute('data-view'); 
+            if(views[viewKey]) activateView(views[viewKey]); 
+            e.stopPropagation(); // Prevent dropdown toggle from firing if it's a sub-item
+        });
     });
 
     // Sidebar Toggle Listeners
@@ -2028,7 +2241,7 @@
             e.stopPropagation();
         });
     });
-    document.querySelectorAll('.sub-item-3d').forEach(sub => { sub.addEventListener('click', () => alert('Feature: ' + sub.innerText)); });
+    document.querySelectorAll('.sub-item-3d:not([data-view])').forEach(sub => { sub.addEventListener('click', () => alert('Feature: ' + sub.innerText)); });
     document.getElementById('logoutBtn')?.addEventListener('click', () => location.reload());
     function updateClock() { 
         const timeEl = document.getElementById('currentTimeDisplay'); 
